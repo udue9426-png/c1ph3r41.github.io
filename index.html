@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SYSTEM MALFUNCTION</title>
+    <title>SYSTEM OVERRIDE</title>
     <style>
         * {
             box-sizing: border-box;
@@ -19,7 +19,7 @@
             color: #00ff00;
         }
 
-        /* İlk Açılış Ekranı Düzeni (Logo ve Yazı) */
+        /* Ana Giriş Ekranı */
         .container {
             width: 100%;
             height: 100%;
@@ -32,7 +32,7 @@
             transition: opacity 0.5s ease-in-out;
         }
 
-        /* Saf kodla çizilen logo koordinatları ve parlama efekti */
+        /* Şeytan Logosu ve Siber Neon Efekti */
         .devil-logo {
             width: 320px;
             height: 320px;
@@ -57,9 +57,39 @@
             text-shadow: 0 0 5px #00ff00;
             text-align: center;
             letter-spacing: 2px;
+            min-height: 24px;
         }
 
-        /* Sürekli Akan Yeşil Kod Yağmuru Arka Planı */
+        /* Yanıp Sönen Terminal İmleci (Cursor) */
+        .cursor {
+            display: inline-block;
+            width: 10px;
+            height: 18px;
+            background-color: #00ff00;
+            margin-left: 5px;
+            animation: blinkCursor 0.8s infinite;
+            vertical-align: middle;
+        }
+
+        @keyframes blinkCursor {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0; }
+        }
+
+        /* Dolan İlerleme Çubuğu Tasarımı */
+        .progress-container {
+            width: 300px;
+            margin-top: 15px;
+            font-size: 11pt;
+            text-align: left;
+        }
+
+        .progress-bar {
+            color: #00ff00;
+            letter-spacing: 1px;
+        }
+
+        /* Matrix Arka Planı */
         .matrix-bg {
             position: absolute;
             top: 0;
@@ -70,14 +100,14 @@
             opacity: 0.15;
         }
 
-        /* 3 Saniye Sonra Devreye Giren Erişim Onay Katmanı */
+        /* Onay Ekranı Düzeni */
         .access-screen {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background-color: transparent; /* Arka plan siyah kalır, arkadaki kod yağmuru görünür */
+            background-color: transparent;
             z-index: 9999;
             opacity: 0;
             pointer-events: none;
@@ -92,24 +122,24 @@
             pointer-events: auto;
         }
 
-        /* Ortadaki Siber Yeşil Terminal Kutusu */
+        /* Ortadaki Siber Kutu */
         .access-box {
             border: 2px solid #00ff00;
-            background-color: rgba(0, 15, 0, 0.9); /* Yarı şeffaf siyah/koyu yeşil siber kutu */
-            padding: 30px 50px;
+            background-color: rgba(0, 15, 0, 0.95);
+            padding: 35px 55px;
             color: #00ff00;
             font-size: 24pt;
             font-weight: bold;
             letter-spacing: 5px;
             text-shadow: 0 0 10px #00ff00;
-            box-shadow: 0 0 25px rgba(0, 255, 0, 0.4);
+            box-shadow: 0 0 30px rgba(0, 255, 0, 0.5);
             text-align: center;
             animation: pulseBox 1.5s infinite alternate;
         }
 
         @keyframes pulseBox {
             0% { box-shadow: 0 0 15px rgba(0, 255, 0, 0.3); }
-            100% { box-shadow: 0 0 30px rgba(0, 255, 0, 0.6); }
+            100% { box-shadow: 0 0 35px rgba(0, 255, 0, 0.7); }
         }
     </style>
 </head>
@@ -133,7 +163,12 @@
             <path d="M 42 58 C 45 66, 55 66, 58 58 C 54 62, 46 62, 42 58 Z" fill="#ffffff" stroke="#ffffff" stroke-width="1"/>
             <path d="M 43 59 L 45 61 L 47 59 L 49 62 L 51 59 L 53 62 L 55 59 L 57 60" fill="none" stroke="#000000" stroke-width="0.8"/>
         </svg>
-        <div class="terminal-text">SISTEM ELE GECIRILDI...</div>
+        
+        <div class="terminal-text"><span id="typewriter"></span><span class="cursor"></span></div>
+        
+        <div class="progress-container">
+            <div id="progressBar" class="progress-bar">PROBING: [░░░░░░░░░░] 0%</div>
+        </div>
     </div>
 
     <div class="access-screen" id="accessScreen">
@@ -143,7 +178,90 @@
     </div>
 
     <script>
-        // Matrix Canvas Kodları
+        // 1. GİZLİ KONSOL MESAJI (F12 İncele diyenler için)
+        console.log("%c☠ HEY! BURADA NE ARIYORSUN? ☠\\n%cSistem logları izleniyor...", "color: red; font-size: 20px; font-weight: bold;", "color: #00ff00; font-size: 14px;");
+
+        // 2. SES MOTORU KODLARI (Web Audio API)
+        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        
+        function playKeySound() {
+            try {
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(140 + Math.random() * 80, audioCtx.currentTime); 
+                gain.gain.setValueAtTime(0.04, audioCtx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.05);
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+                osc.start();
+                osc.stop(audioCtx.currentTime + 0.05);
+            } catch(e) {}
+        }
+
+        function playSuccessSound() {
+            try {
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+                osc.type = 'square';
+                osc.frequency.setValueAtTime(880, audioCtx.currentTime); 
+                gain.gain.setValueAtTime(0.1, audioCtx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.3);
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+                osc.start();
+                osc.stop(audioCtx.currentTime + 0.3);
+            } catch(e) {}
+        }
+
+        // Tarayıcıların güvenlik politikası gereği, seslerin çalabilmesi için kullanıcının ekrana 1 kere tıklaması gerekir.
+        window.addEventListener('click', () => {
+            if (audioCtx.state === 'suspended') { audioCtx.resume(); }
+        }, { once: true });
+
+        // 3. CANLI YAZI EFEKTI (Typewriter)
+        const textToType = "SISTEM ELE GECIRILDI...";
+        let textIndex = 0;
+        const typewriterElement = document.getElementById('typewriter');
+
+        function typeEffect() {
+            if (textIndex < textToType.length) {
+                typewriterElement.textContent += textToType.charAt(textIndex);
+                playKeySound(); // Ses efektini tetikle
+                textIndex++;
+                setTimeout(typeEffect, 100);
+            }
+        }
+        setTimeout(typeEffect, 600); 
+
+        // 4. SİBER İLERLEME ÇUBUĞU (Loading Bar)
+        const progressBar = document.getElementById('progressBar');
+        let progress = 0;
+        
+        const progressInterval = setInterval(() => {
+            progress += 5;
+            if (progress > 100) progress = 100;
+            
+            const totalBlocks = 10;
+            const filledBlocks = Math.round((progress / 100) * totalBlocks);
+            const emptyBlocks = totalBlocks - filledBlocks;
+            
+            const barStr = "█".repeat(filledBlocks) + "░".repeat(emptyBlocks);
+            progressBar.textContent = `OVERRIDE: [${barStr}] ${progress}%`;
+            
+            if (progress >= 100) {
+                clearInterval(progressInterval);
+                setTimeout(triggerAccess, 400); // %100 olduktan sonra sahne geçişi yap
+            }
+        }, 150);
+
+        function triggerAccess() {
+            playSuccessSound(); // Onay sesini çal
+            document.getElementById('mainContainer').style.opacity = '0';
+            document.getElementById('accessScreen').classList.add('active');
+        }
+
+        // 5. MATRIX KOD YAĞMURU
         const canvas = document.getElementById('matrix');
         const ctx = canvas.getContext('2d');
 
@@ -152,19 +270,15 @@
 
         const nums = "0123456789XÆØ★☣☠";
         const alphabet = nums.split("");
-
         const fontSize = 16;
         const columns = canvas.width / fontSize;
 
         const rainDrops = [];
-        for (let x = 0; x < columns; x++) {
-            rainDrops[x] = 1;
-        }
+        for (let x = 0; x < columns; x++) { rainDrops[x] = 1; }
 
         const draw = () => {
             ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
             ctx.fillRect(0, 0, canvas.width, canvas.height);
-
             ctx.fillStyle = '#00ff00';
             ctx.font = fontSize + 'px monospace';
 
@@ -178,19 +292,12 @@
                 rainDrops[i]++;
             }
         };
-
         setInterval(draw, 30);
 
         window.addEventListener('resize', () => {
             canvas.width = window.innerWidth;
             canvas.height = window.innerHeight;
         });
-
-        // Zamanlayıcı: 3 Saniye Sonra Logoyu Gizler, Onay Kutusunu Getirir
-        setTimeout(() => {
-            document.getElementById('mainContainer').style.opacity = '0';
-            document.getElementById('accessScreen').classList.add('active');
-        }, 3000);
     </script>
 </body>
 </html>
