@@ -8,7 +8,6 @@
         * {
             box-sizing: border-box;
         }
-        /* Tüm sayfayı simsiyah yapar */
         body, html {
             margin: 0;
             padding: 0;
@@ -31,7 +30,7 @@
             z-index: 2;
         }
 
-        /* Saf kodla çizilen logonun boyutları ve siber neon efekti */
+        /* SVG Logo Tasarımı */
         .devil-logo {
             width: 320px;
             height: 320px;
@@ -39,7 +38,6 @@
             animation: pulse 2s infinite alternate;
         }
 
-        /* Logonun hacker sitelerindeki gibi nefes alıp verir gibi parlaması */
         @keyframes pulse {
             0% {
                 transform: scale(0.98);
@@ -68,6 +66,33 @@
             z-index: 1;
             opacity: 0.15;
         }
+
+        /* 3 Saniye Sonra Gelecek Tam Ekran Yeşil Katman */
+        .green-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #00ff00; /* Parlak siber yeşil ekran */
+            z-index: 9999;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.6s ease-in-out; /* Yumuşak açılış efekti */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: #000000;
+            font-weight: bold;
+            font-size: 26pt;
+            letter-spacing: 4px;
+        }
+
+        /* Aktif olduğunda görünür yap */
+        .green-screen.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
     </style>
 </head>
 <body>
@@ -94,8 +119,12 @@
         <div class="terminal-text">SISTEM ELE GECIRILDI...</div>
     </div>
 
+    <div class="green-screen" id="greenScreen">
+        ERISIM ONAYLANDI
+    </div>
+
     <script>
-        // Arka Plandaki Matrix Sayı Yağmuru Kodları
+        // Matrix Canvas Kodları
         const canvas = document.getElementById('matrix');
         const ctx = canvas.getContext('2d');
 
@@ -109,7 +138,6 @@
         const columns = canvas.width / fontSize;
 
         const rainDrops = [];
-
         for (let x = 0; x < columns; x++) {
             rainDrops[x] = 1;
         }
@@ -138,6 +166,11 @@
             canvas.width = window.innerWidth;
             canvas.height = window.innerHeight;
         });
+
+        // Zamanlayıcı: 3 Saniye Sonra (3000 milisaniye) Yeşil Ekranı Tetikler
+        setTimeout(() => {
+            document.getElementById('greenScreen').classList.add('active');
+        }, 3000);
     </script>
 </body>
 </html>
