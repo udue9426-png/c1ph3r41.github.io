@@ -1,120 +1,117 @@
 <!DOCTYPE html>
 <html lang="tr">
 <head>
-    <meta charset="UTF-8">
-    <title>C1ph3r Hack</title>
+<meta charset="UTF-8">
+<title>C1ph3r Hack Terminal</title>
+<link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Share Tech Mono',monospace}
+body{background:black;color:#00ff9c;overflow:hidden}
 
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: monospace;
-        }
+/* Matrix */
+canvas{position:fixed;top:0;left:0;z-index:-1}
 
-        body {
-            height: 100vh;
-            background: url("bg.jpg") no-repeat center center/cover;
-            color: #00ff66;
-            overflow: hidden;
-        }
+/* NASA */
+.nasa{
+ position:fixed;top:20px;right:20px;
+ width:110px;height:110px;border:2px solid #00ff9c;
+ border-radius:50%;display:flex;align-items:center;justify-content:center;
+ animation:spin 12s linear infinite
+}
+@keyframes spin{from{transform:rotate(0)}to{transform:rotate(360deg)}}
 
-        .overlay {
-            position: absolute;
-            inset: 0;
-            background: rgba(0,0,0,0.65);
-        }
+/* Terminal */
+.terminal{
+ width:80%;max-width:900px;
+ margin:100px auto;
+ border:1px solid #00ff9c;
+ padding:20px;
+ background:rgba(0,0,0,0.8)
+}
+.line{margin-bottom:8px}
+.cursor::after{content:"_";animation:blink 1s infinite}
+@keyframes blink{50%{opacity:0}}
 
-        .welcome {
-            position: absolute;
-            top: 40%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            text-align: center;
-            animation: fadeOut 3s ease forwards;
-            animation-delay: 2s;
-            z-index: 2;
-        }
-
-        .welcome h1 {
-            font-size: 48px;
-            text-shadow: 0 0 20px #00ff66;
-        }
-
-        .welcome p {
-            font-size: 22px;
-            margin-top: 10px;
-        }
-
-        .panel {
-            position: absolute;
-            bottom: 50px;
-            left: 50%;
-            transform: translateX(-50%);
-            display: flex;
-            gap: 20px;
-            opacity: 0;
-            animation: showPanel 1s ease forwards;
-            animation-delay: 5s;
-            z-index: 2;
-        }
-
-        .file {
-            padding: 15px 25px;
-            border: 1px solid #00ff66;
-            cursor: pointer;
-            transition: 0.3s;
-            user-select: none;
-        }
-
-        .file:hover {
-            background: #00ff66;
-            color: black;
-            box-shadow: 0 0 20px #00ff66;
-        }
-
-        @keyframes fadeOut {
-            to {
-                opacity: 0;
-                visibility: hidden;
-            }
-        }
-
-        @keyframes showPanel {
-            to {
-                opacity: 1;
-            }
-        }
-    </style>
+.files{margin-top:20px}
+.file{cursor:pointer;padding:6px}
+.file:hover{background:#00ff9c;color:black}
+</style>
 </head>
-
 <body>
 
-<div class="overlay"></div>
+<canvas id="matrix"></canvas>
+<div class="nasa">NASA</div>
 
-<div class="welcome">
-    <h1>C1ph3r Hack</h1>
-    <p>Hoşgeldiniz</p>
-</div>
-
-<div class="panel">
-    <div class="file" onclick="animateFile(this)">📁 System</div>
-    <div class="file" onclick="animateFile(this)">📁 Network</div>
-    <div class="file" onclick="animateFile(this)">📁 Logs</div>
-    <div class="file" onclick="animateFile(this)">📁 Access</div>
-</div>
+<div class="terminal" id="terminal"></div>
 
 <script>
-    function animateFile(el) {
-        el.style.transform = "scale(1.2)";
-        el.style.boxShadow = "0 0 30px #00ff66";
+/* MATRIX */
+const canvas=document.getElementById("matrix"),ctx=canvas.getContext("2d");
+canvas.width=innerWidth;canvas.height=innerHeight;
+const chars="01CIPHERHACK$#@%",fs=14,cols=canvas.width/fs,drops=Array(cols).fill(1);
+setInterval(()=>{
+ ctx.fillStyle="rgba(0,0,0,.05)";
+ ctx.fillRect(0,0,canvas.width,canvas.height);
+ ctx.fillStyle="#00ff9c";ctx.font=fs+"px monospace";
+ drops.forEach((y,i)=>{
+  const t=chars[Math.random()*chars.length|0];
+  ctx.fillText(t,i*fs,y*fs);
+  if(y*fs>canvas.height&&Math.random()>.975)drops[i]=0;
+  drops[i]++;
+ });
+},33);
 
-        setTimeout(() => {
-            el.style.transform = "scale(1)";
-            el.style.boxShadow = "none";
-            alert(el.innerText + " açıldı");
-        }, 400);
-    }
+/* TERMINAL YAZI */
+const term=document.getElementById("terminal");
+const lines=[
+ "[BOOT] Initializing system...",
+ "[OK] Connecting to NASA server...",
+ "[OK] Encryption bypassed",
+ "[ACCESS GRANTED]",
+ "",
+ ">>> C1ph3r Hack Terminal",
+ ">>> Hoşgeldiniz",
+ "",
+ "Kullanılabilir Dosyalar:"
+];
+
+let i=0;
+function typeLine(){
+ if(i<lines.length){
+  const div=document.createElement("div");
+  div.className="line cursor";
+  term.appendChild(div);
+  let j=0;
+  const t=setInterval(()=>{
+   div.textContent+=lines[i][j++]||"";
+   if(j>lines[i].length){clearInterval(t);div.classList.remove("cursor");i++;setTimeout(typeLine,300)}
+  },40);
+ }else showFiles();
+}
+typeLine();
+
+/* DOSYALAR */
+function showFiles(){
+ const f=document.createElement("div");
+ f.className="files";
+ f.innerHTML=`
+ <div class="file" onclick="cmd('system.log')">📁 system.log</div>
+ <div class="file" onclick="cmd('data.bin')">📁 data.bin</div>
+ <div class="file" onclick="cmd('access.key')">📁 access.key</div>
+ <div class="file" onclick="cmd('exploit.cfg')">📁 exploit.cfg</div>
+ `;
+ term.appendChild(f);
+}
+
+function cmd(name){
+ const d=document.createElement("div");
+ d.textContent="> open "+name;
+ term.appendChild(d);
+ const r=document.createElement("div");
+ r.textContent="[EXECUTED] "+name+" başarıyla çalıştırıldı.";
+ term.appendChild(r);
+ term.scrollTop=term.scrollHeight;
+}
 </script>
 
 </body>
