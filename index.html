@@ -19,6 +19,7 @@
             color: #00ff00;
         }
 
+        /* İlk Açılış Ekranı Düzeni (Logo ve Yazı) */
         .container {
             width: 100%;
             height: 100%;
@@ -28,9 +29,10 @@
             align-items: center;
             position: relative;
             z-index: 2;
+            transition: opacity 0.5s ease-in-out;
         }
 
-        /* SVG Logo Tasarımı */
+        /* Saf kodla çizilen logo koordinatları ve parlama efekti */
         .devil-logo {
             width: 320px;
             height: 320px;
@@ -57,6 +59,7 @@
             letter-spacing: 2px;
         }
 
+        /* Sürekli Akan Yeşil Kod Yağmuru Arka Planı */
         .matrix-bg {
             position: absolute;
             top: 0;
@@ -67,31 +70,46 @@
             opacity: 0.15;
         }
 
-        /* 3 Saniye Sonra Gelecek Tam Ekran Yeşil Katman */
-        .green-screen {
+        /* 3 Saniye Sonra Devreye Giren Erişim Onay Katmanı */
+        .access-screen {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background-color: #00ff00; /* Parlak siber yeşil ekran */
+            background-color: transparent; /* Arka plan siyah kalır, arkadaki kod yağmuru görünür */
             z-index: 9999;
             opacity: 0;
             pointer-events: none;
-            transition: opacity 0.6s ease-in-out; /* Yumuşak açılış efekti */
+            transition: opacity 0.6s ease-in-out;
             display: flex;
             justify-content: center;
             align-items: center;
-            color: #000000;
-            font-weight: bold;
-            font-size: 26pt;
-            letter-spacing: 4px;
         }
 
-        /* Aktif olduğunda görünür yap */
-        .green-screen.active {
+        .access-screen.active {
             opacity: 1;
             pointer-events: auto;
+        }
+
+        /* Ortadaki Siber Yeşil Terminal Kutusu */
+        .access-box {
+            border: 2px solid #00ff00;
+            background-color: rgba(0, 15, 0, 0.9); /* Yarı şeffaf siyah/koyu yeşil siber kutu */
+            padding: 30px 50px;
+            color: #00ff00;
+            font-size: 24pt;
+            font-weight: bold;
+            letter-spacing: 5px;
+            text-shadow: 0 0 10px #00ff00;
+            box-shadow: 0 0 25px rgba(0, 255, 0, 0.4);
+            text-align: center;
+            animation: pulseBox 1.5s infinite alternate;
+        }
+
+        @keyframes pulseBox {
+            0% { box-shadow: 0 0 15px rgba(0, 255, 0, 0.3); }
+            100% { box-shadow: 0 0 30px rgba(0, 255, 0, 0.6); }
         }
     </style>
 </head>
@@ -99,7 +117,7 @@
 
     <canvas class="matrix-bg" id="matrix"></canvas>
 
-    <div class="container">
+    <div class="container" id="mainContainer">
         <svg class="devil-logo" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
             <path d="M 42 35 C 38 20, 42 10, 44 5 C 32 10, 36 28, 38 36" fill="none" stroke="#ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
             <path d="M 58 35 C 62 20, 58 10, 56 5 C 68 10, 64 28, 62 36" fill="none" stroke="#ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
@@ -115,12 +133,13 @@
             <path d="M 42 58 C 45 66, 55 66, 58 58 C 54 62, 46 62, 42 58 Z" fill="#ffffff" stroke="#ffffff" stroke-width="1"/>
             <path d="M 43 59 L 45 61 L 47 59 L 49 62 L 51 59 L 53 62 L 55 59 L 57 60" fill="none" stroke="#000000" stroke-width="0.8"/>
         </svg>
-
         <div class="terminal-text">SISTEM ELE GECIRILDI...</div>
     </div>
 
-    <div class="green-screen" id="greenScreen">
-        ERISIM ONAYLANDI
+    <div class="access-screen" id="accessScreen">
+        <div class="access-box">
+            ERISIM ONAYLANDI
+        </div>
     </div>
 
     <script>
@@ -146,7 +165,7 @@
             ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
             ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-            ctx.fillStyle = '#0f0';
+            ctx.fillStyle = '#00ff00';
             ctx.font = fontSize + 'px monospace';
 
             for (let i = 0; i < rainDrops.length; i++) {
@@ -167,9 +186,10 @@
             canvas.height = window.innerHeight;
         });
 
-        // Zamanlayıcı: 3 Saniye Sonra (3000 milisaniye) Yeşil Ekranı Tetikler
+        // Zamanlayıcı: 3 Saniye Sonra Logoyu Gizler, Onay Kutusunu Getirir
         setTimeout(() => {
-            document.getElementById('greenScreen').classList.add('active');
+            document.getElementById('mainContainer').style.opacity = '0';
+            document.getElementById('accessScreen').classList.add('active');
         }, 3000);
     </script>
 </body>
