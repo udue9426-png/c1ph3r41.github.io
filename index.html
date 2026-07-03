@@ -2,188 +2,193 @@
 <html lang="tr">
 <head>
 <meta charset="UTF-8">
-<title>C1ph3r Hack Core</title>
+<title>C1ph3r</title>
 <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap" rel="stylesheet">
-<style>
-*{margin:0;padding:0;box-sizing:border-box;font-family:'Share Tech Mono',monospace}
-body{background:#000;color:#00ff9c;overflow:hidden}
-canvas{position:fixed;top:0;left:0;z-index:-1}
 
-/* NASA */
-.nasa{
- position:fixed;top:20px;right:20px;
- width:120px;height:120px;border:2px solid #00ff9c;
- border-radius:50%;display:flex;align-items:center;justify-content:center;
- animation:spin 15s linear infinite;font-size:14px
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:'Share Tech Mono', monospace;
 }
-@keyframes spin{to{transform:rotate(360deg)}}
+
+html,body{
+    width:100%;
+    height:100%;
+    background:#000;
+    overflow:hidden;
+    color:#00ff9c;
+}
+
+/* ORTA SEMBOL */
+#logo-screen{
+    position:fixed;
+    inset:0;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    cursor:pointer;
+}
+
+#logo-screen img{
+    width:260px;
+    transition:.4s;
+    opacity:.95;
+}
+
+#logo-screen img:hover{
+    filter:drop-shadow(0 0 20px #ffffff);
+    transform:scale(1.05);
+}
 
 /* LOGIN */
-.login{
- width:360px;margin:140px auto;padding:20px;
- border:1px solid #00ff9c;background:rgba(0,0,0,.9)
+#login{
+    display:none;
+    position:fixed;
+    inset:0;
+    display:flex;
+    align-items:center;
+    justify-content:center;
 }
-.login h2{text-align:center;margin-bottom:15px}
-.login input{
- width:100%;padding:10px;margin:8px 0;
- background:black;border:1px solid #00ff9c;color:#00ff9c
+
+.login-box{
+    border:1px solid #00ff9c;
+    padding:20px;
+    width:320px;
+    background:black;
 }
-.login button{
- width:100%;padding:10px;background:#00ff9c;
- border:none;color:black;cursor:pointer
+
+.login-box h2{
+    text-align:center;
+    margin-bottom:15px;
 }
-.error{color:#ff4444;text-align:center;margin-top:8px;display:none}
-.shake{animation:shake .3s}
-@keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-5px)}75%{transform:translateX(5px)}}
+
+.login-box input{
+    width:100%;
+    margin:6px 0;
+    padding:10px;
+    background:black;
+    border:1px solid #00ff9c;
+    color:#00ff9c;
+}
+
+.login-box button{
+    width:100%;
+    margin-top:10px;
+    padding:10px;
+    background:#00ff9c;
+    color:black;
+    border:none;
+    cursor:pointer;
+}
+
+.error{
+    text-align:center;
+    color:red;
+    display:none;
+    margin-top:8px;
+}
 
 /* TERMINAL */
-.terminal{
- display:none;width:85%;max-width:1000px;
- margin:90px auto;border:1px solid #00ff9c;
- padding:20px;background:rgba(0,0,0,.9);height:70vh;overflow:auto
+#terminal{
+    display:none;
+    position:fixed;
+    inset:0;
+    padding:30px;
 }
-.line{margin-bottom:6px}
-.cursor::after{content:"_";animation:blink 1s infinite}
-@keyframes blink{50%{opacity:0}}
 
-.file{padding:6px;cursor:pointer}
-.file:hover{background:#00ff9c;color:black}
-
-/* Effects */
-.glitch{animation:glitch .2s infinite}
-@keyframes glitch{
- 0%{text-shadow:2px 0 red}
- 50%{text-shadow:-2px 0 cyan}
- 100%{text-shadow:2px 0 red}
+.line{
+    margin-bottom:6px;
 }
-.alarm{color:#ff3333;animation:flash .5s infinite}
-@keyframes flash{50%{opacity:.3}}
 
-.progress{width:100%;border:1px solid #00ff9c;height:10px;margin-top:5px}
-.fill{height:100%;width:0;background:#00ff9c}
+.cursor::after{
+    content:"_";
+    animation:blink 1s infinite;
+}
+
+@keyframes blink{
+    50%{opacity:0}
+}
 </style>
 </head>
+
 <body>
 
-<canvas id="matrix"></canvas>
-<div class="nasa">NASA CORE</div>
-
-<div class="login" id="loginBox">
-<h2>SECURE ACCESS</h2>
-<input id="user" placeholder="Username">
-<input id="pass" type="password" placeholder="Password">
-<button onclick="login()">ENTER</button>
-<div class="error" id="err">ACCESS DENIED</div>
+<!-- LOGO -->
+<div id="logo-screen">
+    <img src="logo.png" alt="Symbol">
 </div>
 
-<div class="terminal" id="terminal"></div>
+<!-- LOGIN -->
+<div id="login">
+    <div class="login-box">
+        <h2>SECURE ACCESS</h2>
+        <input id="user" placeholder="Username">
+        <input id="pass" type="password" placeholder="Password">
+        <button onclick="checkLogin()">ENTER</button>
+        <div class="error" id="err">ACCESS DENIED</div>
+    </div>
+</div>
+
+<!-- TERMINAL -->
+<div id="terminal"></div>
 
 <script>
-/* AYAR */
-const USER="admin", PASS="c1ph3r";
+const USER="admin";
+const PASS="c1ph3r";
 
-/* MATRIX */
-const c=document.getElementById("matrix"),x=c.getContext("2d");
-c.width=innerWidth;c.height=innerHeight;
-const ch="01C1PH3RHACK#$@",fs=14,cols=c.width/fs,d=Array(cols).fill(1);
-setInterval(()=>{
- x.fillStyle="rgba(0,0,0,.05)";
- x.fillRect(0,0,c.width,c.height);
- x.fillStyle="#00ff9c";x.font=fs+"px monospace";
- d.forEach((y,i)=>{
-  x.fillText(ch[Math.random()*ch.length|0],i*fs,y*fs);
-  if(y*fs>c.height&&Math.random()>.98)d[i]=0;
-  d[i]++;
- });
-},33);
+/* LOGO TIK */
+document.getElementById("logo-screen").onclick=()=>{
+    document.getElementById("logo-screen").style.display="none";
+    document.getElementById("login").style.display="flex";
+};
 
 /* LOGIN */
-function login(){
- if(user.value===USER && pass.value===PASS){
-  loginBox.style.display="none";
-  start();
- }else{
-  err.style.display="block";
-  loginBox.classList.add("shake");
-  setTimeout(()=>loginBox.classList.remove("shake"),300);
- }
+function checkLogin(){
+    if(user.value===USER && pass.value===PASS){
+        document.getElementById("login").style.display="none";
+        setTimeout(startTerminal,3000);
+    }else{
+        err.style.display="block";
+    }
 }
 
 /* TERMINAL */
 const term=document.getElementById("terminal");
 const boot=[
-"[BOOT] Initializing core...",
-"[OK] Secure tunnel established",
-"[OK] AI modules online",
+"[BOOT] Initializing system...",
+"[OK] Secure channel established",
+"[OK] Identity verified",
 "[ACCESS GRANTED]",
 "",
-">>> C1ph3r Hack Control",
-""
+">>> C1ph3r Core Online"
 ];
+
 let i=0;
-function start(){
- term.style.display="block";
- type();
-}
-function type(){
- if(i<boot.length){
-  const l=document.createElement("div");
-  l.className="line cursor";term.appendChild(l);
-  let j=0;
-  const t=setInterval(()=>{
-   l.textContent+=boot[i][j++]||"";
-   if(j>boot[i].length){
-    clearInterval(t);l.classList.remove("cursor");
-    i++;setTimeout(type,200);
-   }
-  },35);
- }else menu();
-}
-function menu(){
- ["system.log","data.bin","access.key","exploit.cfg"].forEach(n=>{
-  const f=document.createElement("div");
-  f.className="file";f.textContent="📁 "+n;
-  f.onclick=()=>openFile(n);
-  term.appendChild(f);
- });
+function startTerminal(){
+    term.style.display="block";
+    typeLine();
 }
 
-/* DOSYA EFEKTLERİ */
-function openFile(n){
- const box=document.createElement("div");
- term.appendChild(box);
-
- if(n==="system.log"){
-  box.className="glitch";
-  let a=["Scanning...","Tracking signals...","Logs synced","OK"];
-  let k=0;const iv=setInterval(()=>{
-   box.textContent+=a[k++]+"\n";
-   if(k===a.length)clearInterval(iv);
-  },300);
- }
-
- if(n==="data.bin"){
-  box.innerHTML="Loading data<div class='progress'><div class='fill'></div></div>";
-  let f=box.querySelector(".fill"),p=0;
-  const iv=setInterval(()=>{
-   p+=4;f.style.width=p+"%";
-   if(p>=100){clearInterval(iv);box.innerHTML+="\nDONE";}
-  },100);
- }
-
- if(n==="access.key"){
-  let t=0;const iv=setInterval(()=>{
-   box.textContent="Decrypting: "+Math.random().toString(36).slice(2,8);
-   if(++t>12){clearInterval(iv);box.textContent="KEY ACCEPTED ✔";}
-  },180);
- }
-
- if(n==="exploit.cfg"){
-  box.innerHTML="<div class='alarm'>⚠ CORE ALERT ⚠</div> SYSTEM UNSTABLE";
- }
-
- term.scrollTop=term.scrollHeight;
+function typeLine(){
+    if(i<boot.length){
+        const d=document.createElement("div");
+        d.className="line cursor";
+        term.appendChild(d);
+        let j=0;
+        const t=setInterval(()=>{
+            d.textContent+=boot[i][j++]||"";
+            if(j>boot[i].length){
+                clearInterval(t);
+                d.classList.remove("cursor");
+                i++;
+                setTimeout(typeLine,300);
+            }
+        },40);
+    }
 }
 </script>
+
 </body>
 </html>
