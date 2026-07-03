@@ -3,10 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SYSTEM OVERRIDE</title>
+    <title>SATO-OS // MAIN TERMINAL</title>
     <style>
         * {
             box-sizing: border-box;
+            user-select: none;
         }
         body, html {
             margin: 0;
@@ -19,7 +20,7 @@
             color: #00ff00;
         }
 
-        /* Ana Giriş Ekranı */
+        /* 1. GİRİŞ EKRANI (Şeytan Logolu Kısım) */
         .container {
             width: 100%;
             height: 100%;
@@ -27,12 +28,13 @@
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            position: relative;
-            z-index: 2;
-            transition: opacity 0.5s ease-in-out;
+            position: absolute;
+            top: 0;
+            left: 0;
+            z-index: 10;
+            transition: opacity 0.8s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
-        /* Şeytan Logosu ve Siber Neon Efekti */
         .devil-logo {
             width: 320px;
             height: 320px;
@@ -41,14 +43,8 @@
         }
 
         @keyframes pulse {
-            0% {
-                transform: scale(0.98);
-                filter: drop-shadow(0 0 10px #ff0000);
-            }
-            100% {
-                transform: scale(1.02);
-                filter: drop-shadow(0 0 25px #ff3333);
-            }
+            0% { transform: scale(0.98); filter: drop-shadow(0 0 10px #ff0000); }
+            100% { transform: scale(1.02); filter: drop-shadow(0 0 25px #ff3333); }
         }
 
         .terminal-text {
@@ -60,7 +56,6 @@
             min-height: 24px;
         }
 
-        /* Yanıp Sönen Terminal İmleci (Cursor) */
         .cursor {
             display: inline-block;
             width: 10px;
@@ -76,42 +71,23 @@
             50% { opacity: 0; }
         }
 
-        /* Dolan İlerleme Çubuğu Tasarımı */
         .progress-container {
             width: 300px;
             margin-top: 15px;
             font-size: 11pt;
-            text-align: left;
         }
 
-        .progress-bar {
-            color: #00ff00;
-            letter-spacing: 1px;
-        }
-
-        /* Matrix Arka Planı */
-        .matrix-bg {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: 1;
-            opacity: 0.15;
-        }
-
-        /* Onay Ekranı Düzeni */
+        /* 2. ERİŞİM ONAYLANDI PENCERESİ */
         .access-screen {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background-color: transparent;
-            z-index: 9999;
+            z-index: 20;
             opacity: 0;
             pointer-events: none;
-            transition: opacity 0.6s ease-in-out;
+            transition: opacity 0.5s ease-in-out;
             display: flex;
             justify-content: center;
             align-items: center;
@@ -122,7 +98,6 @@
             pointer-events: auto;
         }
 
-        /* Ortadaki Siber Kutu */
         .access-box {
             border: 2px solid #00ff00;
             background-color: rgba(0, 15, 0, 0.95);
@@ -133,7 +108,6 @@
             letter-spacing: 5px;
             text-shadow: 0 0 10px #00ff00;
             box-shadow: 0 0 30px rgba(0, 255, 0, 0.5);
-            text-align: center;
             animation: pulseBox 1.5s infinite alternate;
         }
 
@@ -141,6 +115,219 @@
             0% { box-shadow: 0 0 15px rgba(0, 255, 0, 0.3); }
             100% { box-shadow: 0 0 35px rgba(0, 255, 0, 0.7); }
         }
+
+        /* MATRIX ARKA PLAN */
+        .matrix-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+            opacity: 0.12;
+        }
+
+        /* 3. EDEX-UI TARZI ANA SİBER PANEL */
+        .hud-interface {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 5;
+            display: grid;
+            grid-template-columns: 320px 1fr 350px;
+            grid-template-rows: 60px 1fr 280px;
+            padding: 10px;
+            gap: 12px;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 1s cubic-bezier(0.4, 0, 0.2, 1);
+            background: linear-gradient(180px, rgba(0,10,0,0.4) 0%, rgba(0,0,0,0) 100%);
+        }
+
+        .hud-interface.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        /* Cyber Panel Kutuları */
+        .hud-panel {
+            border: 1px solid rgba(0, 255, 0, 0.3);
+            background-color: rgba(0, 5, 0, 0.75);
+            box-shadow: inset 0 0 15px rgba(0, 255, 0, 0.05), 0 0 10px rgba(0,0,0,0.8);
+            padding: 15px;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .hud-panel::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 2px;
+            background: linear-gradient(90deg, #00ff00, transparent);
+        }
+
+        .panel-title {
+            font-size: 10pt;
+            font-weight: bold;
+            letter-spacing: 2px;
+            border-bottom: 1px solid rgba(0, 255, 0, 0.2);
+            padding-bottom: 5px;
+            margin-bottom: 10px;
+            color: #00ff00;
+            text-shadow: 0 0 4px rgba(0,255,0,0.5);
+            text-transform: uppercase;
+        }
+
+        /* TOP HEADER BAR */
+        .hud-header {
+            grid-column: 1 / -1;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border: 1px solid rgba(0, 255, 0, 0.3);
+            background-color: rgba(0, 10, 0, 0.85);
+            padding: 0 20px;
+        }
+        .header-title { font-weight: bold; letter-spacing: 3px; font-size: 13pt; }
+        .header-status { color: #00ff00; animation: blink 2s infinite; }
+
+        /* LEFT SIDEBAR: SYSTEM STATS */
+        .hud-left { grid-row: 2 / 3; }
+        .stat-line { font-size: 10pt; margin-bottom: 10px; display: flex; justify-content: space-between; }
+        .stat-val { color: #ffffff; }
+        
+        .chart-container {
+            flex-grow: 1;
+            margin-top: 10px;
+            border: 1px dashed rgba(0,255,0,0.2);
+            position: relative;
+        }
+        .canvas-chart { width: 100%; height: 100%; }
+
+        /* MAIN SHELL (CENTER NODE) */
+        .hud-center {
+            grid-row: 2 / 3;
+            grid-column: 2 / 3;
+            font-size: 10.5pt;
+            line-height: 1.5;
+        }
+        .shell-output {
+            flex-grow: 1;
+            overflow-y: auto;
+            padding-right: 5px;
+            color: rgba(0, 255, 0, 0.85);
+        }
+        .shell-line { margin-bottom: 6px; }
+        .shell-green { color: #00ff00; }
+        .shell-white { color: #ffffff; }
+        .shell-blue { color: #00ffff; }
+
+        /* RIGHT SIDEBAR: RADAR */
+        .hud-right { grid-row: 2 / 3; }
+        .radar-box {
+            width: 100%;
+            height: 180px;
+            border: 1px dashed rgba(0,255,0,0.3);
+            border-radius: 50%;
+            margin: 10px auto;
+            position: relative;
+            overflow: hidden;
+        }
+        .radar-sweep {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: conic-gradient(from 0deg, rgba(0,255,0,0.15) 0deg, transparent 90deg);
+            transform-origin: center;
+            animation: sweep 4s linear infinite;
+        }
+        @keyframes sweep { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        .radar-grid {
+            position: absolute;
+            top: 10%; left: 10%; width: 80%; height: 80%;
+            border: 1px dashed rgba(0,255,0,0.15);
+            border-radius: 50%;
+        }
+        .radar-grid-2 {
+            position: absolute;
+            top: 30%; left: 30%; width: 40%; height: 40%;
+            border: 1px dashed rgba(0,255,0,0.15);
+            border-radius: 50%;
+        }
+        .radar-dot {
+            position: absolute;
+            width: 6px; height: 6px; background-color: #00ff00; border-radius: 50%;
+            box-shadow: 0 0 8px #00ff00;
+            animation: ping 1.5s infinite alternate;
+        }
+
+        /* BOTTOM SECTION: FILE SYSTEM & VIRTUAL KEYBOARD */
+        .hud-bottom-left {
+            grid-column: 1 / 2;
+            grid-row: 3 / 4;
+        }
+        .file-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            text-align: center;
+            font-size: 9pt;
+        }
+        .file-icon {
+            padding: 10px 5px;
+            border: 1px solid rgba(0, 255, 0, 0.15);
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .file-icon:hover {
+            background-color: rgba(0,255,0,0.1);
+            border-color: #00ff00;
+        }
+        .file-svg { width: 32px; height: 32px; fill: #00ff00; margin-bottom: 4px; }
+
+        .hud-bottom-right {
+            grid-column: 2 / -1;
+            grid-row: 3 / 4;
+            padding: 10px;
+        }
+
+        /* Cyber Virtual Keyboard Layout */
+        .keyboard {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+            width: 100%;
+            height: 100%;
+            justify-content: center;
+        }
+        .kb-row { display: flex; gap: 5px; width: 100%; }
+        .kb-key {
+            flex: 1;
+            height: 38px;
+            border: 1px solid rgba(0, 255, 0, 0.25);
+            background: rgba(0,15,0,0.4);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 8.5pt;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.15s;
+        }
+        .kb-key:hover {
+            background: rgba(0, 255, 0, 0.2);
+            color: #ffffff;
+            box-shadow: 0 0 10px rgba(0,255,0,0.3);
+            border-color: #00ff00;
+        }
+        .kb-wide { flex: 2; }
+        .kb-space { flex: 6; }
+
+        @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
     </style>
 </head>
 <body>
@@ -163,141 +350,132 @@
             <path d="M 42 58 C 45 66, 55 66, 58 58 C 54 62, 46 62, 42 58 Z" fill="#ffffff" stroke="#ffffff" stroke-width="1"/>
             <path d="M 43 59 L 45 61 L 47 59 L 49 62 L 51 59 L 53 62 L 55 59 L 57 60" fill="none" stroke="#000000" stroke-width="0.8"/>
         </svg>
-        
         <div class="terminal-text"><span id="typewriter"></span><span class="cursor"></span></div>
-        
         <div class="progress-container">
             <div id="progressBar" class="progress-bar">PROBING: [░░░░░░░░░░] 0%</div>
         </div>
     </div>
 
     <div class="access-screen" id="accessScreen">
-        <div class="access-box">
-            ERISIM ONAYLANDI
+        <div class="access-box">ERISIM ONAYLANDI</div>
+    </div>
+
+    <div class="hud-interface" id="hudInterface">
+        
+        <div class="hud-header">
+            <div class="header-title">SATO-OS // NODE_NODE_DEVI_9426</div>
+            <div id="liveClock" style="letter-spacing: 1px;">00:00:00</div>
+            <div class="header-status">● SYSTEM_ONLINE</div>
         </div>
+
+        <div class="hud-panel hud-left">
+            <div class="panel-title">SYSTEM MONITOR</div>
+            <div class="stat-line"><span>CORE TEMP:</span><span class="stat-val" id="coreTemp">42.4 °C</span></div>
+            <div class="stat-line"><span>CPU LOAD:</span><span class="stat-val" id="cpuLoad">12%</span></div>
+            <div class="stat-line"><span>RAM USAGE:</span><span class="stat-val">4.8GB / 16GB</span></div>
+            <div class="stat-line"><span>UPLINK SPEED:</span><span class="stat-val" style="color: #00ffff;">742.1 Mb/s</span></div>
+            
+            <div class="chart-container">
+                <canvas id="cpuChart" class="canvas-chart"></canvas>
+            </div>
+        </div>
+
+        <div class="hud-panel hud-center">
+            <div class="panel-title">MAIN SHELL OVERRIDE</div>
+            <div class="shell-output" id="shellOutput">
+                </div>
+        </div>
+
+        <div class="hud-panel hud-right">
+            <div class="panel-title">NETWORK PROBE RADAR</div>
+            <div class="radar-box">
+                <div class="radar-sweep"></div>
+                <div class="radar-grid"></div>
+                <div class="radar-grid-2"></div>
+                <div class="radar-dot" style="top: 30%; left: 45%;"></div>
+                <div class="radar-dot" style="top: 70%; left: 25%; animation-delay: 0.5s;"></div>
+                <div class="radar-dot" style="top: 45%; left: 75%; animation-delay: 1s;"></div>
+            </div>
+            <div class="panel-title" style="margin-top:15px;">CRYPTO DECRYPTOR</div>
+            <div style="font-size: 8.5pt; color: #88ff88; font-family: monospace; line-height: 1.4;" id="cryptoStream">
+                MD5::GENERATING_HASH...
+            </div>
+        </div>
+
+        <div class="hud-panel hud-bottom-left">
+            <div class="panel-title">FILESYSTEM</div>
+            <div class="file-grid">
+                <div class="file-icon" onclick="triggerFile('root_src')">
+                    <svg class="file-svg" viewBox="0 0 24 24"><path d="M10 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2h-8l-2-2z"/></svg>
+                    <div>root_src</div>
+                </div>
+                <div class="file-icon" onclick="triggerFile('exploits')">
+                    <svg class="file-svg" viewBox="0 0 24 24"><path d="M10 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2h-8l-2-2z"/></svg>
+                    <div>exploits</div>
+                </div>
+                <div class="file-icon" onclick="triggerFile('logs_db')">
+                    <svg class="file-svg" viewBox="0 0 24 24"><path d="M10 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2h-8l-2-2z"/></svg>
+                    <div>logs_db</div>
+                </div>
+                <div class="file-icon" onclick="triggerFile('bypass.sh')">
+                    <svg class="file-svg" viewBox="0 0 24 24" style="fill:#00ffff;"><path d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"/></svg>
+                    <div>bypass.sh</div>
+                </div>
+                <div class="file-icon" onclick="triggerFile('config.json')">
+                    <svg class="file-svg" viewBox="0 0 24 24" style="fill:#00ffff;"><path d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"/></svg>
+                    <div>config.json</div>
+                </div>
+                <div class="file-icon" onclick="triggerFile('shadow_pwd')">
+                    <svg class="file-svg" viewBox="0 0 24 24" style="fill:#ff3333;"><path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2z"/></svg>
+                    <div>shadow</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="hud-panel hud-bottom-right">
+            <div class="keyboard">
+                <div class="kb-row">
+                    <div class="kb-key">ESC</div><div class="kb-key">1</div><div class="kb-key">2</div><div class="kb-key">3</div><div class="kb-key">4</div><div class="kb-key">5</div><div class="kb-key">6</div><div class="kb-key">7</div><div class="kb-key">8</div><div class="kb-key">9</div><div class="kb-key">0</div><div class="kb-key kb-wide">BACK</div>
+                </div>
+                <div class="kb-row">
+                    <div class="kb-key">TAB</div><div class="kb-key">Q</div><div class="kb-key">W</div><div class="kb-key">E</div><div class="kb-key">R</div><div class="kb-key">T</div><div class="kb-key">Y</div><div class="kb-key">U</div><div class="kb-key">I</div><div class="kb-key">O</div><div class="kb-key">P</div><div class="kb-key">{</div><div class="kb-key">}</div>
+                </div>
+                <div class="kb-row">
+                    <div class="kb-key kb-wide">CAPS</div><div class="kb-key">A</div><div class="kb-key">S</div><div class="kb-key">D</div><div class="kb-key">F</div><div class="kb-key">G</div><div class="kb-key">H</div><div class="kb-key">J</div><div class="kb-key">K</div><div class="kb-key">L</div><div class="kb-key">;</div><div class="kb-key">"</div><div class="kb-key kb-wide">ENTER</div>
+                </div>
+                <div class="kb-row">
+                    <div class="kb-key kb-wide">SHIFT</div><div class="kb-key">Z</div><div class="kb-key">X</div><div class="kb-key">C</div><div class="kb-key">V</div><div class="kb-key">B</div><div class="kb-key">N</div><div class="kb-key">M</div><div class="kb-key">,</div><div class="kb-key">.</div><div class="kb-key">/</div><div class="kb-key kb-wide">SHIFT</div>
+                </div>
+                <div class="kb-row">
+                    <div class="kb-key">CTRL</div><div class="kb-key">FN</div><div class="kb-key">ALT</div><div class="kb-key kb-space"></div><div class="kb-key">ALT GR</div><div class="kb-key">CTRL</div>
+                </div>
+            </div>
+        </div>
+
     </div>
 
     <script>
-        // 1. GİZLİ KONSOL MESAJI (F12 İncele diyenler için)
+        // 1. GİZLİ KONSOL LOGU
         console.log("%c☠ HEY! BURADA NE ARIYORSUN? ☠\\n%cSistem logları izleniyor...", "color: red; font-size: 20px; font-weight: bold;", "color: #00ff00; font-size: 14px;");
 
-        // 2. SES MOTORU KODLARI (Web Audio API)
+        // --- AUDIO ENGINE (Web Audio API) ---
         const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-        
         function playKeySound() {
             try {
                 const osc = audioCtx.createOscillator();
                 const gain = audioCtx.createGain();
                 osc.type = 'sine';
-                osc.frequency.setValueAtTime(140 + Math.random() * 80, audioCtx.currentTime); 
-                gain.gain.setValueAtTime(0.04, audioCtx.currentTime);
-                gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.05);
-                osc.connect(gain);
-                gain.connect(audioCtx.destination);
-                osc.start();
-                osc.stop(audioCtx.currentTime + 0.05);
+                osc.frequency.setValueAtTime(140 + Math.random() * 80, audioCtx.currentTime);
+                gain.gain.setValueAtTime(0.03, audioCtx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.04);
+                osc.connect(gain); gain.connect(audioCtx.destination);
+                osc.start(); osc.stop(audioCtx.currentTime + 0.04);
             } catch(e) {}
         }
-
         function playSuccessSound() {
             try {
                 const osc = audioCtx.createOscillator();
                 const gain = audioCtx.createGain();
-                osc.type = 'square';
-                osc.frequency.setValueAtTime(880, audioCtx.currentTime); 
-                gain.gain.setValueAtTime(0.1, audioCtx.currentTime);
-                gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.3);
-                osc.connect(gain);
-                gain.connect(audioCtx.destination);
-                osc.start();
-                osc.stop(audioCtx.currentTime + 0.3);
-            } catch(e) {}
-        }
-
-        // Tarayıcıların güvenlik politikası gereği, seslerin çalabilmesi için kullanıcının ekrana 1 kere tıklaması gerekir.
-        window.addEventListener('click', () => {
-            if (audioCtx.state === 'suspended') { audioCtx.resume(); }
-        }, { once: true });
-
-        // 3. CANLI YAZI EFEKTI (Typewriter)
-        const textToType = "SISTEM ELE GECIRILDI...";
-        let textIndex = 0;
-        const typewriterElement = document.getElementById('typewriter');
-
-        function typeEffect() {
-            if (textIndex < textToType.length) {
-                typewriterElement.textContent += textToType.charAt(textIndex);
-                playKeySound(); // Ses efektini tetikle
-                textIndex++;
-                setTimeout(typeEffect, 100);
-            }
-        }
-        setTimeout(typeEffect, 600); 
-
-        // 4. SİBER İLERLEME ÇUBUĞU (Loading Bar)
-        const progressBar = document.getElementById('progressBar');
-        let progress = 0;
-        
-        const progressInterval = setInterval(() => {
-            progress += 5;
-            if (progress > 100) progress = 100;
-            
-            const totalBlocks = 10;
-            const filledBlocks = Math.round((progress / 100) * totalBlocks);
-            const emptyBlocks = totalBlocks - filledBlocks;
-            
-            const barStr = "█".repeat(filledBlocks) + "░".repeat(emptyBlocks);
-            progressBar.textContent = `OVERRIDE: [${barStr}] ${progress}%`;
-            
-            if (progress >= 100) {
-                clearInterval(progressInterval);
-                setTimeout(triggerAccess, 400); // %100 olduktan sonra sahne geçişi yap
-            }
-        }, 150);
-
-        function triggerAccess() {
-            playSuccessSound(); // Onay sesini çal
-            document.getElementById('mainContainer').style.opacity = '0';
-            document.getElementById('accessScreen').classList.add('active');
-        }
-
-        // 5. MATRIX KOD YAĞMURU
-        const canvas = document.getElementById('matrix');
-        const ctx = canvas.getContext('2d');
-
-        canvas.width = window.innerWidth;
-        canvas.height = window.innerHeight;
-
-        const nums = "0123456789XÆØ★☣☠";
-        const alphabet = nums.split("");
-        const fontSize = 16;
-        const columns = canvas.width / fontSize;
-
-        const rainDrops = [];
-        for (let x = 0; x < columns; x++) { rainDrops[x] = 1; }
-
-        const draw = () => {
-            ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
-            ctx.fillRect(0, 0, canvas.width, canvas.height);
-            ctx.fillStyle = '#00ff00';
-            ctx.font = fontSize + 'px monospace';
-
-            for (let i = 0; i < rainDrops.length; i++) {
-                const text = alphabet[Math.floor(Math.random() * alphabet.length)];
-                ctx.fillText(text, i * fontSize, rainDrops[i] * fontSize);
-
-                if (rainDrops[i] * fontSize > canvas.height && Math.random() > 0.975) {
-                    rainDrops[i] = 0;
-                }
-                rainDrops[i]++;
-            }
-        };
-        setInterval(draw, 30);
-
-        window.addEventListener('resize', () => {
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
-        });
-    </script>
-</body>
-</html>
+                osc.type = 'square'; osc.frequency.setValueAtTime(880, audioCtx.currentTime);
+                gain.gain.setValueAtTime(0.08, audioCtx.currentTime);
+     
