@@ -1,194 +1,46 @@
 <!DOCTYPE html>
 <html lang="tr">
 <head>
-<meta charset="UTF-8">
-<title>C1ph3r</title>
-<link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap" rel="stylesheet">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Giriş</title>
+    <style>
+        /* Tüm sayfayı simsiyah yapar ve kaydırma çubuklarını gizler */
+        body, html {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #000000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+        }
 
-<style>
-*{
-    margin:0;
-    padding:0;
-    box-sizing:border-box;
-    font-family:'Share Tech Mono', monospace;
-}
+        /* Logoyu tam ortalar ve boyutunu ayarlar */
+        .logo-container {
+            max-width: 80%;
+            max-height: 80%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
 
-html,body{
-    width:100%;
-    height:100%;
-    background:#000;
-    overflow:hidden;
-    color:#00ff9c;
-}
-
-/* ORTA SEMBOL */
-#logo-screen{
-    position:fixed;
-    inset:0;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    cursor:pointer;
-}
-
-#logo-screen img{
-    width:260px;
-    transition:.4s;
-    opacity:.95;
-}
-
-#logo-screen img:hover{
-    filter:drop-shadow(0 0 20px #ffffff);
-    transform:scale(1.05);
-}
-
-/* LOGIN */
-#login{
-    display:none;
-    position:fixed;
-    inset:0;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-}
-
-.login-box{
-    border:1px solid #00ff9c;
-    padding:20px;
-    width:320px;
-    background:black;
-}
-
-.login-box h2{
-    text-align:center;
-    margin-bottom:15px;
-}
-
-.login-box input{
-    width:100%;
-    margin:6px 0;
-    padding:10px;
-    background:black;
-    border:1px solid #00ff9c;
-    color:#00ff9c;
-}
-
-.login-box button{
-    width:100%;
-    margin-top:10px;
-    padding:10px;
-    background:#00ff9c;
-    color:black;
-    border:none;
-    cursor:pointer;
-}
-
-.error{
-    text-align:center;
-    color:red;
-    display:none;
-    margin-top:8px;
-}
-
-/* TERMINAL */
-#terminal{
-    display:none;
-    position:fixed;
-    inset:0;
-    padding:30px;
-}
-
-.line{
-    margin-bottom:6px;
-}
-
-.cursor::after{
-    content:"_";
-    animation:blink 1s infinite;
-}
-
-@keyframes blink{
-    50%{opacity:0}
-}
-</style>
+        .logo-container img {
+            width: 100%;
+            height: auto;
+            max-width: 400px; /* Logonun ekranda çok büyük olmaması için sınır */
+            object-fit: contain;
+        }
+    </style>
 </head>
-
 <body>
 
-<!-- LOGO -->
-<div id="logo-screen">
-    <img src="logo.png" alt="Symbol">
-</div>
-
-<!-- LOGIN -->
-<div id="login">
-    <div class="login-box">
-        <h2>SECURE ACCESS</h2>
-        <input id="user" placeholder="Username">
-        <input id="pass" type="password" placeholder="Password">
-        <button onclick="checkLogin()">ENTER</button>
-        <div class="error" id="err">ACCESS DENIED</div>
+    <div class="logo-container">
+        <!-- src kısmına logonun tam adını ve uzantısını yazmalısın -->
+        <img src="1000007275.png" alt="Logo">
     </div>
-</div>
-
-<!-- TERMINAL -->
-<div id="terminal"></div>
-
-<script>
-const USER="admin";
-const PASS="c1ph3r";
-
-/* LOGO TIK */
-document.getElementById("logo-screen").onclick=()=>{
-    document.getElementById("logo-screen").style.display="none";
-    document.getElementById("login").style.display="flex";
-};
-
-/* LOGIN */
-function checkLogin(){
-    if(user.value===USER && pass.value===PASS){
-        document.getElementById("login").style.display="none";
-        setTimeout(startTerminal,3000);
-    }else{
-        err.style.display="block";
-    }
-}
-
-/* TERMINAL */
-const term=document.getElementById("terminal");
-const boot=[
-"[BOOT] Initializing system...",
-"[OK] Secure channel established",
-"[OK] Identity verified",
-"[ACCESS GRANTED]",
-"",
-">>> C1ph3r Core Online"
-];
-
-let i=0;
-function startTerminal(){
-    term.style.display="block";
-    typeLine();
-}
-
-function typeLine(){
-    if(i<boot.length){
-        const d=document.createElement("div");
-        d.className="line cursor";
-        term.appendChild(d);
-        let j=0;
-        const t=setInterval(()=>{
-            d.textContent+=boot[i][j++]||"";
-            if(j>boot[i].length){
-                clearInterval(t);
-                d.classList.remove("cursor");
-                i++;
-                setTimeout(typeLine,300);
-            }
-        },40);
-    }
-}
-</script>
 
 </body>
 </html>
