@@ -9,11 +9,36 @@
         body {
             background-color: #000;
             color: #00ff00;
-            font-family: 'Courier New', monospace;
+            font-family: 'Courier New', Courier, monospace;
             height: 100vh;
             overflow: hidden;
             position: relative;
         }
+
+        /* 1000007181_2.jpg GÖRSELİNDEKİ YEŞİL DÜNYA VE CRT EFEKTİ */
+        #desktop {
+            display: none;
+            height: 100vh;
+            position: relative;
+            background: radial-gradient(circle, rgba(0, 40, 10, 0.4) 0%, rgba(0,0,0,1) 100%);
+        }
+        
+        /* Arka plandaki yuvarlak amblem ve dünya haritası havası veren CSS efekti */
+        .center-matrix {
+            position: absolute;
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+            width: 320px; height: 320px;
+            border: 4px double #00ff00;
+            border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            text-align: center; font-weight: bold; font-size: 20px;
+            background: rgba(0, 20, 5, 0.3);
+            box-shadow: 0 0 50px rgba(0, 255, 0, 0.2);
+            opacity: 0.5; pointer-events: none;
+        }
+
+        /* SİSTEM AÇILIŞ (BOOT) EKRANI */
         #boot-screen {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
@@ -30,25 +55,8 @@
             text-shadow: 0 0 10px #00ff00;
             margin-bottom: 20px;
         }
-        #desktop {
-            display: none;
-            height: 100vh;
-            position: relative;
-            background: radial-gradient(circle, rgba(0, 40, 10, 0.4) 0%, rgba(0,0,0,1) 100%);
-        }
-        .center-matrix {
-            position: absolute;
-            top: 50%; left: 50%;
-            transform: translate(-50%, -50%);
-            width: 320px; height: 320px;
-            border: 4px double #00ff00;
-            border-radius: 50%;
-            display: flex; align-items: center; justify-content: center;
-            text-align: center; font-weight: bold; font-size: 20px;
-            background: rgba(0, 20, 5, 0.3);
-            box-shadow: 0 0 50px rgba(0, 255, 0, 0.2);
-            opacity: 0.5; pointer-events: none;
-        }
+
+        /* SAĞ TARAFTAKİ İKON DÜZENİ */
         .desktop-icons {
             position: absolute;
             top: 20px; right: 20px;
@@ -64,7 +72,246 @@
         .icon:hover { background: rgba(0, 255, 0, 0.1); border-color: #00ff00; }
         .icon-symbol { font-size: 28px; margin-bottom: 5px; font-weight: bold; }
         .icon-label { font-size: 11px; text-shadow: 0 0 5px #000; }
+        
+        /* HAREKET EDEBİLİR PENCERELER */
         .window {
             position: absolute; width: 280px;
-            background: rgba(0, 5
-                                      
+            background: rgba(0, 5, 1, 0.95); border: 1px solid #00ff00;
+            box-shadow: 0 0 15px rgba(0, 255, 0, 0.3); z-index: 10; display: none;
+        }
+        .window-header {
+            background: #002200; padding: 6px 10px; border-bottom: 1px solid #00ff00;
+            display: flex; justify-content: space-between; font-weight: bold; font-size: 12px;
+            cursor: move; /* Taşınabilir olduğunu belirtir */
+        }
+        .close-btn { cursor: pointer; color: #ff0000; font-weight: bold; }
+        .window-body { padding: 12px; height: 150px; overflow-y: auto; font-size: 12px; }
+        .crypto-count { font-size: 18px; color: #fff; text-shadow: 0 0 10px #00ff00; text-align: center; margin-top: 15px; }
+
+        /* GÖREV ÇUBUĞU (ALT KISIM) */
+        .taskbar {
+            position: absolute; bottom: 0; left: 0; width: 100%; height: 35px;
+            background: #00ff00; color: #000; display: flex; align-items: center; padding: 0 15px;
+            font-weight: bold; z-index: 100; font-size: 13px;
+        }
+        .start-btn { background: #000; color: #00ff00; padding: 2px 10px; border: 1px solid #00ff00; cursor: pointer; font-size: 12px; margin-right: 10px; }
+    </style>
+</head>
+<body>
+
+    <!-- GİRİŞ EKRANI -->
+    <div id="boot-screen">
+        <div class="welcome-text" id="welcome-msg"></div>
+        <div id="boot-log"></div>
+    </div>
+
+    <!-- ANA MASAÜSTÜ -->
+    <div id="desktop">
+        <div class="center-matrix">
+            C1PH3R SECURITY SYSTEMS<br>
+            <span style="font-size: 11px; color: #aaa;">[ SYSTEM STABLE ]</span>
+        </div>
+
+        <!-- SAĞDAKİ DOSYALAR / İKONLAR -->
+        <div class="desktop-icons">
+            <div class="icon" onclick="openWindow('win-btc')">
+                <div class="icon-symbol">[B]</div>
+                <div class="icon-label">Bitcoin Miner</div>
+            </div>
+            <div class="icon" onclick="openWindow('win-crack')">
+                <div class="icon-symbol">[*]</div>
+                <div class="icon-label">Password Cracker</div>
+            </div>
+            <div class="icon" onclick="openWindow('win-plant')">
+                <div class="icon-symbol">[X]</div>
+                <div class="icon-label">Nuclear Plant</div>
+            </div>
+            <div class="icon" onclick="openWindow('win-console')">
+                <div class="icon-symbol">[>]</div>
+                <div class="icon-label">Program Console</div>
+            </div>
+        </div>
+
+        <!-- BİTCOİN PENCERESİ -->
+        <div class="window" id="win-btc" style="top: 80px; left: 20px;">
+            <div class="window-header">
+                <span>bitcoin_miner.exe</span>
+                <span class="close-btn" onclick="closeWindow('win-btc')">✖</span>
+            </div>
+            <div class="window-body">
+                <p>Uzak sunuculara bağlanılıyor...</p>
+                <div class="crypto-count">₿ <span id="btc-val">0.000000</span></div>
+            </div>
+        </div>
+
+        <!-- ŞİFRE KIRICI PENCERESİ -->
+        <div class="window" id="win-crack" style="top: 130px; left: 40px;">
+            <div class="window-header">
+                <span>brute_force.sh</span>
+                <span class="close-btn" onclick="closeWindow('win-crack')">✖</span>
+            </div>
+            <div class="window-body">
+                <p>Kırma işlemi başlatıldı...</p>
+                <div id="crack-log" style="margin-top: 10px; color:#aaa;"></div>
+            </div>
+        </div>
+
+        <!-- NÜKLEER SANTRAL PENCERESİ -->
+        <div class="window" id="win-plant" style="top: 200px; left: 30px;">
+            <div class="window-header">
+                <span>core_control.sys</span>
+                <span class="close-btn" onclick="closeWindow('win-plant')">✖</span>
+            </div>
+            <div class="window-body" style="text-align: center;">
+                <p style="color: red; font-weight: bold;">⚠️ CORE TEMP CRITICAL</p>
+                <p style="margin-top:10px;">Reaktör Seviyesi: %94</p>
+            </div>
+        </div>
+
+        <!-- KONSOL PENCERESİ -->
+        <div class="window" id="win-console" style="top: 60px; left: 15px;">
+            <div class="window-header">
+                <span>c1ph3r@mainframe:~</span>
+                <span class="close-btn" onclick="closeWindow('win-console')">✖</span>
+            </div>
+            <div class="window-body" style="background:#000;">
+                <p style="color: #00ff00;">> Modüller hazır.</p>
+                <p style="color: #aaa;">> Çıkış yapmak için pencereyi kapatın.</p>
+            </div>
+        </div>
+
+        <!-- GÖREV ÇUBUĞU -->
+        <div class="taskbar">
+            <button class="start-btn">☰ Start</button>
+            <span>SYS_ACTIVE</span>
+        </div>
+    </div>
+
+    <script>
+        // AÇILIŞ SİMÜLASYONU VE YAZILAR
+        const welcomeMsg = document.getElementById('welcome-msg');
+        const bootLog = document.getElementById('boot-log');
+        
+        let welcomeText = "C1ph3r Hack Hoşgeldiniz...";
+        let wIndex = 0;
+        
+        function typeWelcome() {
+            if (wIndex < welcomeText.length) {
+                welcomeMsg.innerHTML += welcomeText.charAt(wIndex);
+                wIndex++;
+                setTimeout(typeWelcome, 80);
+            } else {
+                startBootLogs();
+            }
+        }
+
+        const logs = [
+            "KERNEL: Başlatılıyor...",
+            "NETWORK: Güvenli tünel kuruldu.",
+            "DOSYA SİSTEMİ: Bağlanıyor...",
+            "MASAÜSTÜ: Arayüz yükleniyor...",
+            "SİSTEM: BAŞARILI!"
+        ];
+        let logIndex = 0;
+
+        function startBootLogs() {
+            if (logIndex < logs.length) {
+                bootLog.innerHTML += logs[logIndex] + "<br>";
+                logIndex++;
+                setTimeout(startBootLogs, 400);
+            } else {
+                setTimeout(() => {
+                    document.getElementById('boot-screen').style.display = 'none';
+                    document.getElementById('desktop').style.display = 'block';
+                }, 800);
+            }
+        }
+        window.onload = typeWelcome;
+
+        function openWindow(id) { document.getElementById(id).style.display = 'block'; }
+        function closeWindow(id) { document.getElementById(id).style.display = 'none'; }
+
+        // BİTCOİN VE LOG SİMÜLASYONLARI
+        let btc = 0;
+        setInterval(() => {
+            if(document.getElementById('win-btc').style.display === 'block') {
+                btc += Math.random() * 0.00003;
+                document.getElementById('btc-val').innerText = btc.toFixed(6);
+            }
+        }, 800);
+
+        const crackLog = document.getElementById('crack-log');
+        setInterval(() => {
+            if(document.getElementById('win-crack').style.display === 'block') {
+                const randomHex = Math.random().toString(16).substring(2, 8).toUpperCase();
+                crackLog.innerHTML += `TRY [${randomHex}] -> RED<br>`;
+                if(crackLog.innerHTML.split('<br>').length > 6) {
+                    crackLog.innerHTML = crackLog.innerHTML.split('<br>').slice(1).join('<br>');
+                }
+            }
+        }, 400);
+
+        // HEM MOBİL HEM PC İÇİN PENCERE HAREKET ETTİRME (SÜRÜKLE - BIRAK) ALTYAPISI
+        const windows = document.querySelectorAll('.window');
+        windows.forEach(win => {
+            const header = win.querySelector('.window-header');
+            let isDragging = false;
+            let currentX, currentY, initialX, initialY;
+            let xOffset = 0, yOffset = 0;
+
+            // PC için fare olayları
+            header.addEventListener('mousedown', dragStart);
+            document.addEventListener('mousemove', drag);
+            document.addEventListener('mouseup', dragEnd);
+
+            // Telefon/Tablet için dokunmatik ekran olayları
+            header.addEventListener('touchstart', dragStart, { passive: false });
+            document.addEventListener('touchmove', drag, { passive: false });
+            document.addEventListener('touchend', dragEnd);
+
+            function dragStart(e) {
+                let clientX, clientY;
+                if (e.type === "touchstart") {
+                    clientX = e.touches[0].clientX;
+                    clientY = e.touches[0].clientY;
+                } else {
+                    clientX = e.clientX;
+                    clientY = e.clientY;
+                }
+                
+                // Mevcut konum ofsetlerini parse et
+                const style = window.getComputedStyle(win);
+                xOffset = parseInt(style.left) || 0;
+                yOffset = parseInt(style.top) || 0;
+
+                initialX = clientX - xOffset;
+                initialY = clientY - yOffset;
+                isDragging = true;
+            }
+
+            function drag(e) {
+                if (isDragging) {
+                    if (e.cancelable) e.preventDefault();
+                    let clientX, clientY;
+                    if (e.type === "touchmove") {
+                        clientX = e.touches[0].clientX;
+                        clientY = e.touches[0].clientY;
+                    } else {
+                        clientX = e.clientX;
+                        clientY = e.clientY;
+                    }
+                    currentX = clientX - initialX;
+                    currentY = clientY - initialY;
+
+                    win.style.left = currentX + "px";
+                    win.style.top = currentY + "px";
+                }
+            }
+
+            function dragEnd() {
+                isDragging = false;
+            }
+        });
+    </script>
+</body>
+</html>
