@@ -2,39 +2,46 @@
 <html lang="tr">
 <head>
 <meta charset="UTF-8">
-<title>C1ph3r Hack Terminal</title>
+<title>C1ph3r Hack Secure</title>
 <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap" rel="stylesheet">
 <style>
 *{margin:0;padding:0;box-sizing:border-box;font-family:'Share Tech Mono',monospace}
-body{background:black;color:#00ff9c;overflow:hidden}
-
-/* Matrix */
+body{background:#000;color:#00ff9c;overflow:hidden}
 canvas{position:fixed;top:0;left:0;z-index:-1}
 
 /* NASA */
-.nasa{
- position:fixed;top:20px;right:20px;
- width:110px;height:110px;border:2px solid #00ff9c;
- border-radius:50%;display:flex;align-items:center;justify-content:center;
- animation:spin 12s linear infinite
-}
-@keyframes spin{from{transform:rotate(0)}to{transform:rotate(360deg)}}
+.nasa{position:fixed;top:20px;right:20px;width:110px;height:110px;border:2px solid #00ff9c;border-radius:50%;
+display:flex;align-items:center;justify-content:center;animation:spin 12s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* Login */
+.login{width:360px;margin:120px auto;padding:20px;border:1px solid #00ff9c;background:rgba(0,0,0,.85)}
+.login h2{text-align:center;margin-bottom:15px}
+.login input{width:100%;margin:8px 0;padding:10px;background:black;border:1px solid #00ff9c;color:#00ff9c}
+.login button{width:100%;padding:10px;margin-top:10px;background:#00ff9c;color:black;border:none;cursor:pointer}
+.error{color:#ff3b3b;margin-top:8px;display:none}
+.shake{animation:shake .3s}
+@keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-5px)}75%{transform:translateX(5px)}}
 
 /* Terminal */
-.terminal{
- width:80%;max-width:900px;
- margin:100px auto;
- border:1px solid #00ff9c;
- padding:20px;
- background:rgba(0,0,0,0.8)
-}
-.line{margin-bottom:8px}
+.terminal{display:none;width:80%;max-width:900px;margin:90px auto;border:1px solid #00ff9c;padding:20px;background:rgba(0,0,0,.85)}
+.line{margin-bottom:6px}
 .cursor::after{content:"_";animation:blink 1s infinite}
 @keyframes blink{50%{opacity:0}}
 
-.files{margin-top:20px}
 .file{cursor:pointer;padding:6px}
 .file:hover{background:#00ff9c;color:black}
+
+/* Animasyon alanı */
+.anim{margin-top:10px;padding:10px;border:1px dashed #00ff9c}
+
+/* Progress bar */
+.bar{width:100%;height:10px;border:1px solid #00ff9c;margin-top:6px}
+.fill{height:100%;width:0;background:#00ff9c}
+
+/* Alarm */
+.alarm{color:#ff3b3b;animation:flash .5s infinite}
+@keyframes flash{50%{opacity:.2}}
 </style>
 </head>
 <body>
@@ -42,77 +49,102 @@ canvas{position:fixed;top:0;left:0;z-index:-1}
 <canvas id="matrix"></canvas>
 <div class="nasa">NASA</div>
 
+<!-- LOGIN -->
+<div class="login" id="loginBox">
+  <h2>SECURE LOGIN</h2>
+  <input id="user" placeholder="Username">
+  <input id="pass" type="password" placeholder="Password">
+  <button onclick="login()">LOGIN</button>
+  <div class="error" id="err">ACCESS DENIED</div>
+</div>
+
+<!-- TERMINAL -->
 <div class="terminal" id="terminal"></div>
 
 <script>
+/* AYARLAR */
+const USERNAME="admin", PASSWORD="c1ph3r";
+
 /* MATRIX */
 const canvas=document.getElementById("matrix"),ctx=canvas.getContext("2d");
 canvas.width=innerWidth;canvas.height=innerHeight;
-const chars="01CIPHERHACK$#@%",fs=14,cols=canvas.width/fs,drops=Array(cols).fill(1);
+const chars="01CIPHERHACK$#@",fs=14,cols=canvas.width/fs,drops=Array(cols).fill(1);
 setInterval(()=>{
- ctx.fillStyle="rgba(0,0,0,.05)";
- ctx.fillRect(0,0,canvas.width,canvas.height);
+ ctx.fillStyle="rgba(0,0,0,.05)";ctx.fillRect(0,0,canvas.width,canvas.height);
  ctx.fillStyle="#00ff9c";ctx.font=fs+"px monospace";
  drops.forEach((y,i)=>{
-  const t=chars[Math.random()*chars.length|0];
-  ctx.fillText(t,i*fs,y*fs);
-  if(y*fs>canvas.height&&Math.random()>.975)drops[i]=0;
-  drops[i]++;
+  ctx.fillText(chars[Math.random()*chars.length|0],i*fs,y*fs);
+  if(y*fs>canvas.height&&Math.random()>.975)drops[i]=0; drops[i]++;
  });
 },33);
 
-/* TERMINAL YAZI */
+/* LOGIN */
+function login(){
+ if(user.value===USERNAME && pass.value===PASSWORD){
+  loginBox.style.display="none"; startTerminal();
+ }else{
+  err.style.display="block"; loginBox.classList.add("shake");
+  setTimeout(()=>loginBox.classList.remove("shake"),300);
+ }
+}
+
+/* TERMINAL */
 const term=document.getElementById("terminal");
 const lines=[
- "[BOOT] Initializing system...",
- "[OK] Connecting to NASA server...",
- "[OK] Encryption bypassed",
+ "[BOOT] Initializing secure environment...",
+ "[OK] Authentication verified",
  "[ACCESS GRANTED]",
  "",
  ">>> C1ph3r Hack Terminal",
- ">>> Hoşgeldiniz",
- "",
  "Kullanılabilir Dosyalar:"
 ];
-
 let i=0;
+function startTerminal(){term.style.display="block"; typeLine();}
 function typeLine(){
  if(i<lines.length){
-  const div=document.createElement("div");
-  div.className="line cursor";
-  term.appendChild(div);
-  let j=0;
-  const t=setInterval(()=>{
-   div.textContent+=lines[i][j++]||"";
-   if(j>lines[i].length){clearInterval(t);div.classList.remove("cursor");i++;setTimeout(typeLine,300)}
-  },40);
+  const d=document.createElement("div"); d.className="line cursor"; term.appendChild(d);
+  let j=0; const t=setInterval(()=>{
+   d.textContent+=lines[i][j++]||"";
+   if(j>lines[i].length){clearInterval(t); d.classList.remove("cursor"); i++; setTimeout(typeLine,200);}
+  },35);
  }else showFiles();
 }
-typeLine();
-
-/* DOSYALAR */
 function showFiles(){
- const f=document.createElement("div");
- f.className="files";
- f.innerHTML=`
- <div class="file" onclick="cmd('system.log')">📁 system.log</div>
- <div class="file" onclick="cmd('data.bin')">📁 data.bin</div>
- <div class="file" onclick="cmd('access.key')">📁 access.key</div>
- <div class="file" onclick="cmd('exploit.cfg')">📁 exploit.cfg</div>
- `;
- term.appendChild(f);
+ ["system.log","data.bin","access.key","exploit.cfg"].forEach(n=>{
+  const f=document.createElement("div"); f.className="file"; f.textContent="📁 "+n;
+  f.onclick=()=>openFile(n); term.appendChild(f);
+ });
 }
 
-function cmd(name){
- const d=document.createElement("div");
- d.textContent="> open "+name;
- term.appendChild(d);
- const r=document.createElement("div");
- r.textContent="[EXECUTED] "+name+" başarıyla çalıştırıldı.";
- term.appendChild(r);
+/* DOSYA ANİMASYONLARI */
+function openFile(name){
+ const box=document.createElement("div"); box.className="anim"; term.appendChild(box);
+
+ if(name==="system.log"){
+  let k=0; const logs=["Scanning ports...","Bypassing firewall...","Dumping logs...","OK"];
+  const iv=setInterval(()=>{ box.textContent+=logs[k++]+"\n"; if(k===logs.length)clearInterval(iv); },300);
+ }
+
+ if(name==="data.bin"){
+  box.innerHTML="Loading data<div class='bar'><div class='fill'></div></div>";
+  const fill=box.querySelector(".fill"); let p=0;
+  const iv=setInterval(()=>{ p+=5; fill.style.width=p+"%"; if(p>=100)clearInterval(iv); },120);
+ }
+
+ if(name==="access.key"){
+  let s="Decrypting: "; box.textContent=s;
+  let t=0; const iv=setInterval(()=>{
+   box.textContent=s+Math.random().toString(36).slice(2,7);
+   if(++t>10){ box.textContent="KEY UNLOCKED ✔"; clearInterval(iv); }
+  },200);
+ }
+
+ if(name==="exploit.cfg"){
+  box.innerHTML="<div class='alarm'>⚠ SECURITY ALERT ⚠</div> Exploit triggered!";
+ }
+
  term.scrollTop=term.scrollHeight;
 }
 </script>
-
 </body>
-</html>
+ </html>
