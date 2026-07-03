@@ -2,7 +2,7 @@
 <html lang="tr">
 <head>
 <meta charset="UTF-8">
-<title>C1ph3r Hack Secure</title>
+<title>C1ph3r Hack Core</title>
 <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap" rel="stylesheet">
 <style>
 *{margin:0;padding:0;box-sizing:border-box;font-family:'Share Tech Mono',monospace}
@@ -10,141 +10,180 @@ body{background:#000;color:#00ff9c;overflow:hidden}
 canvas{position:fixed;top:0;left:0;z-index:-1}
 
 /* NASA */
-.nasa{position:fixed;top:20px;right:20px;width:110px;height:110px;border:2px solid #00ff9c;border-radius:50%;
-display:flex;align-items:center;justify-content:center;animation:spin 12s linear infinite}
+.nasa{
+ position:fixed;top:20px;right:20px;
+ width:120px;height:120px;border:2px solid #00ff9c;
+ border-radius:50%;display:flex;align-items:center;justify-content:center;
+ animation:spin 15s linear infinite;font-size:14px
+}
 @keyframes spin{to{transform:rotate(360deg)}}
 
-/* Login */
-.login{width:360px;margin:120px auto;padding:20px;border:1px solid #00ff9c;background:rgba(0,0,0,.85)}
+/* LOGIN */
+.login{
+ width:360px;margin:140px auto;padding:20px;
+ border:1px solid #00ff9c;background:rgba(0,0,0,.9)
+}
 .login h2{text-align:center;margin-bottom:15px}
-.login input{width:100%;margin:8px 0;padding:10px;background:black;border:1px solid #00ff9c;color:#00ff9c}
-.login button{width:100%;padding:10px;margin-top:10px;background:#00ff9c;color:black;border:none;cursor:pointer}
-.error{color:#ff3b3b;margin-top:8px;display:none}
+.login input{
+ width:100%;padding:10px;margin:8px 0;
+ background:black;border:1px solid #00ff9c;color:#00ff9c
+}
+.login button{
+ width:100%;padding:10px;background:#00ff9c;
+ border:none;color:black;cursor:pointer
+}
+.error{color:#ff4444;text-align:center;margin-top:8px;display:none}
 .shake{animation:shake .3s}
 @keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-5px)}75%{transform:translateX(5px)}}
 
-/* Terminal */
-.terminal{display:none;width:80%;max-width:900px;margin:90px auto;border:1px solid #00ff9c;padding:20px;background:rgba(0,0,0,.85)}
+/* TERMINAL */
+.terminal{
+ display:none;width:85%;max-width:1000px;
+ margin:90px auto;border:1px solid #00ff9c;
+ padding:20px;background:rgba(0,0,0,.9);height:70vh;overflow:auto
+}
 .line{margin-bottom:6px}
 .cursor::after{content:"_";animation:blink 1s infinite}
 @keyframes blink{50%{opacity:0}}
 
-.file{cursor:pointer;padding:6px}
+.file{padding:6px;cursor:pointer}
 .file:hover{background:#00ff9c;color:black}
 
-/* Animasyon alanı */
-.anim{margin-top:10px;padding:10px;border:1px dashed #00ff9c}
+/* Effects */
+.glitch{animation:glitch .2s infinite}
+@keyframes glitch{
+ 0%{text-shadow:2px 0 red}
+ 50%{text-shadow:-2px 0 cyan}
+ 100%{text-shadow:2px 0 red}
+}
+.alarm{color:#ff3333;animation:flash .5s infinite}
+@keyframes flash{50%{opacity:.3}}
 
-/* Progress bar */
-.bar{width:100%;height:10px;border:1px solid #00ff9c;margin-top:6px}
+.progress{width:100%;border:1px solid #00ff9c;height:10px;margin-top:5px}
 .fill{height:100%;width:0;background:#00ff9c}
-
-/* Alarm */
-.alarm{color:#ff3b3b;animation:flash .5s infinite}
-@keyframes flash{50%{opacity:.2}}
 </style>
 </head>
 <body>
 
 <canvas id="matrix"></canvas>
-<div class="nasa">NASA</div>
+<div class="nasa">NASA CORE</div>
 
-<!-- LOGIN -->
 <div class="login" id="loginBox">
-  <h2>SECURE LOGIN</h2>
-  <input id="user" placeholder="Username">
-  <input id="pass" type="password" placeholder="Password">
-  <button onclick="login()">LOGIN</button>
-  <div class="error" id="err">ACCESS DENIED</div>
+<h2>SECURE ACCESS</h2>
+<input id="user" placeholder="Username">
+<input id="pass" type="password" placeholder="Password">
+<button onclick="login()">ENTER</button>
+<div class="error" id="err">ACCESS DENIED</div>
 </div>
 
-<!-- TERMINAL -->
 <div class="terminal" id="terminal"></div>
 
 <script>
-/* AYARLAR */
-const USERNAME="admin", PASSWORD="c1ph3r";
+/* AYAR */
+const USER="admin", PASS="c1ph3r";
 
 /* MATRIX */
-const canvas=document.getElementById("matrix"),ctx=canvas.getContext("2d");
-canvas.width=innerWidth;canvas.height=innerHeight;
-const chars="01CIPHERHACK$#@",fs=14,cols=canvas.width/fs,drops=Array(cols).fill(1);
+const c=document.getElementById("matrix"),x=c.getContext("2d");
+c.width=innerWidth;c.height=innerHeight;
+const ch="01C1PH3RHACK#$@",fs=14,cols=c.width/fs,d=Array(cols).fill(1);
 setInterval(()=>{
- ctx.fillStyle="rgba(0,0,0,.05)";ctx.fillRect(0,0,canvas.width,canvas.height);
- ctx.fillStyle="#00ff9c";ctx.font=fs+"px monospace";
- drops.forEach((y,i)=>{
-  ctx.fillText(chars[Math.random()*chars.length|0],i*fs,y*fs);
-  if(y*fs>canvas.height&&Math.random()>.975)drops[i]=0; drops[i]++;
+ x.fillStyle="rgba(0,0,0,.05)";
+ x.fillRect(0,0,c.width,c.height);
+ x.fillStyle="#00ff9c";x.font=fs+"px monospace";
+ d.forEach((y,i)=>{
+  x.fillText(ch[Math.random()*ch.length|0],i*fs,y*fs);
+  if(y*fs>c.height&&Math.random()>.98)d[i]=0;
+  d[i]++;
  });
 },33);
 
 /* LOGIN */
 function login(){
- if(user.value===USERNAME && pass.value===PASSWORD){
-  loginBox.style.display="none"; startTerminal();
+ if(user.value===USER && pass.value===PASS){
+  loginBox.style.display="none";
+  start();
  }else{
-  err.style.display="block"; loginBox.classList.add("shake");
+  err.style.display="block";
+  loginBox.classList.add("shake");
   setTimeout(()=>loginBox.classList.remove("shake"),300);
  }
 }
 
 /* TERMINAL */
 const term=document.getElementById("terminal");
-const lines=[
- "[BOOT] Initializing secure environment...",
- "[OK] Authentication verified",
- "[ACCESS GRANTED]",
- "",
- ">>> C1ph3r Hack Terminal",
- "Kullanılabilir Dosyalar:"
+const boot=[
+"[BOOT] Initializing core...",
+"[OK] Secure tunnel established",
+"[OK] AI modules online",
+"[ACCESS GRANTED]",
+"",
+">>> C1ph3r Hack Control",
+""
 ];
 let i=0;
-function startTerminal(){term.style.display="block"; typeLine();}
-function typeLine(){
- if(i<lines.length){
-  const d=document.createElement("div"); d.className="line cursor"; term.appendChild(d);
-  let j=0; const t=setInterval(()=>{
-   d.textContent+=lines[i][j++]||"";
-   if(j>lines[i].length){clearInterval(t); d.classList.remove("cursor"); i++; setTimeout(typeLine,200);}
-  },35);
- }else showFiles();
+function start(){
+ term.style.display="block";
+ type();
 }
-function showFiles(){
+function type(){
+ if(i<boot.length){
+  const l=document.createElement("div");
+  l.className="line cursor";term.appendChild(l);
+  let j=0;
+  const t=setInterval(()=>{
+   l.textContent+=boot[i][j++]||"";
+   if(j>boot[i].length){
+    clearInterval(t);l.classList.remove("cursor");
+    i++;setTimeout(type,200);
+   }
+  },35);
+ }else menu();
+}
+function menu(){
  ["system.log","data.bin","access.key","exploit.cfg"].forEach(n=>{
-  const f=document.createElement("div"); f.className="file"; f.textContent="📁 "+n;
-  f.onclick=()=>openFile(n); term.appendChild(f);
+  const f=document.createElement("div");
+  f.className="file";f.textContent="📁 "+n;
+  f.onclick=()=>openFile(n);
+  term.appendChild(f);
  });
 }
 
-/* DOSYA ANİMASYONLARI */
-function openFile(name){
- const box=document.createElement("div"); box.className="anim"; term.appendChild(box);
+/* DOSYA EFEKTLERİ */
+function openFile(n){
+ const box=document.createElement("div");
+ term.appendChild(box);
 
- if(name==="system.log"){
-  let k=0; const logs=["Scanning ports...","Bypassing firewall...","Dumping logs...","OK"];
-  const iv=setInterval(()=>{ box.textContent+=logs[k++]+"\n"; if(k===logs.length)clearInterval(iv); },300);
+ if(n==="system.log"){
+  box.className="glitch";
+  let a=["Scanning...","Tracking signals...","Logs synced","OK"];
+  let k=0;const iv=setInterval(()=>{
+   box.textContent+=a[k++]+"\n";
+   if(k===a.length)clearInterval(iv);
+  },300);
  }
 
- if(name==="data.bin"){
-  box.innerHTML="Loading data<div class='bar'><div class='fill'></div></div>";
-  const fill=box.querySelector(".fill"); let p=0;
-  const iv=setInterval(()=>{ p+=5; fill.style.width=p+"%"; if(p>=100)clearInterval(iv); },120);
+ if(n==="data.bin"){
+  box.innerHTML="Loading data<div class='progress'><div class='fill'></div></div>";
+  let f=box.querySelector(".fill"),p=0;
+  const iv=setInterval(()=>{
+   p+=4;f.style.width=p+"%";
+   if(p>=100){clearInterval(iv);box.innerHTML+="\nDONE";}
+  },100);
  }
 
- if(name==="access.key"){
-  let s="Decrypting: "; box.textContent=s;
-  let t=0; const iv=setInterval(()=>{
-   box.textContent=s+Math.random().toString(36).slice(2,7);
-   if(++t>10){ box.textContent="KEY UNLOCKED ✔"; clearInterval(iv); }
-  },200);
+ if(n==="access.key"){
+  let t=0;const iv=setInterval(()=>{
+   box.textContent="Decrypting: "+Math.random().toString(36).slice(2,8);
+   if(++t>12){clearInterval(iv);box.textContent="KEY ACCEPTED ✔";}
+  },180);
  }
 
- if(name==="exploit.cfg"){
-  box.innerHTML="<div class='alarm'>⚠ SECURITY ALERT ⚠</div> Exploit triggered!";
+ if(n==="exploit.cfg"){
+  box.innerHTML="<div class='alarm'>⚠ CORE ALERT ⚠</div> SYSTEM UNSTABLE";
  }
 
  term.scrollTop=term.scrollHeight;
 }
 </script>
 </body>
- </html>
+</html>
